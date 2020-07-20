@@ -9,6 +9,9 @@ import { clearContainer } from './clear';
 export function fetchCountries(keyLetters) {
   clearContainer();
   const fetchUrl = 'https://restcountries.eu/rest/v2/name/';
+  if (!keyLetters) {
+    return;
+  }
   return fetch(`${fetchUrl}${keyLetters}`)
     .then(response => {
       if (response.ok) {
@@ -18,14 +21,16 @@ export function fetchCountries(keyLetters) {
       }
     })
     .then(data => {
-      if (data) {
-        if (data.length > 10) {
-          errorTooMany();
-        } else if (data.length < 2) {
-          countryCardMaker(data[0]);
-        } else {
-          countryListMaker(data);
-        }
+      if (!data) {
+        return;
+      }
+
+      if (data.length > 10) {
+        errorTooMany();
+      } else if (data.length < 2) {
+        countryCardMaker(data[0]);
+      } else {
+        countryListMaker(data);
       }
     });
 }
